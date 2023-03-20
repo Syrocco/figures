@@ -1,4 +1,4 @@
-Delta model examples
+### Delta model examples.py
 
-![](https://i.imgur.com/qP1cA9L.png)
-![](https://i.imgur.com/jt9CVmE.png)
+![](https://user-images.githubusercontent.com/37348774/226391083-107e2d66-2fd5-4e23-9f08-8087198230de.png)
+![](https://user-images.githubusercontent.com/37348774/226391130-d741deef-fa91-4a51-b40e-9a966fd46b3a.png)
