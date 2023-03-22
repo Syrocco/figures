@@ -55,18 +55,19 @@ plt.ylabel(r"$\chi\gamma$")
 plt.legend()
 plt.grid()
 
+"""
 plt.figure()
-time4 = np.array([curve_fit(partial(exp, maxim = E4[i][0], minim = np.mean(E1[i][-100:])), t[:50], E4[i][:50])[0] for i in range(300)])
-time5 = np.array([curve_fit(partial(exp, maxim = E5[i][0], minim = np.mean(E2[i][-100:])), t[:50], E5[i][:50])[0] for i in range(300)])
+time4 = np.array([curve_fit(partial(exp, maxim = E4[i][0], minim = np.mean(E1[i][-100:])), t[:50], E4[i][:50])[0] for i in range(len(E4))])
+time5 = np.array([curve_fit(partial(exp, maxim = E5[i][0], minim = np.mean(E2[i][-100:])), t[:50], E5[i][:50])[0] for i in range(len(E5))])
 
-plt.scatter(phi, time4*0.005, label = r"$\gamma = 0.005$", s = 7)
+plt.scatter(phi[:-1], time4*0.005, label = r"$\gamma = 0.005$", s = 7)
 plt.scatter(phi, time1*0.01, label = r"$\gamma = 0.01$", marker = "x", s = 7)
-plt.scatter(phi, time5*0.02, label = r"$\gamma = 0.02$", marker = "s", s = 7)
+plt.scatter(phi[:-2], time5*0.02, label = r"$\gamma = 0.02$", marker = "s", s = 7)
 plt.xlabel(r"$\phi$")
 plt.ylabel(r"$\chi\gamma$")
 plt.legend()
 plt.grid()
-
+"""
 
 plt.figure()
 a1 = 0.1509
