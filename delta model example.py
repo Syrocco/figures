@@ -53,6 +53,32 @@ plt.legend()
 plt.grid()
 
 
+plt.figure()
+a1 = 0.1509
+a3 = 0.1700
+a2 = 0.1339
+plt.scatter((phi - a3)/a3, ME3/tempMax(0.95, 0.025), label = r"$\Delta/\beta = 2.5$", s = 7)
+plt.scatter((phi - a1)/a1, ME1/tempMax(0.95, 0.03), label = r"$\Delta/\beta = 3.0$", marker = "x", s = 7)
+plt.scatter((phi - a2)/a2, ME2/tempMax(0.95, 0.035), label = r"$\Delta/\beta = 3.5$", marker = "s", s = 7)
+plt.xlabel(r"$(\phi - \phi_c)/\phi_c$")
+plt.ylabel(r"$T_{ss}/T_{ss}(\gamma = 0)$")
+plt.legend()
+plt.grid()
+plt.title("$\phi_c$ = critical packing fraction obtained with mean free path argument")
+
+plt.figure()
+a1 = phi[np.argmax(time1)]
+a3 = phi[np.argmax(time3)]
+a2 = phi[np.argmax(time2)]
+plt.scatter((phi - a3)/a3, ME3/tempMax(0.95, 0.025), label = r"$\Delta/\beta = 2.5$", s = 7)
+plt.scatter((phi - a1)/a1, ME1/tempMax(0.95, 0.03), label = r"$\Delta/\beta = 3.0$", marker = "x", s = 7)
+plt.scatter((phi - a2)/a2, ME2/tempMax(0.95, 0.035), label = r"$\Delta/\beta = 3.5$", marker = "s", s = 7)
+plt.xlabel(r"$(\phi - \phi_c)/\phi_c$")
+plt.ylabel(r"$T_{ss}/T_{ss}(\gamma = 0)$")
+plt.legend()
+plt.grid()
+plt.title(r"$\phi_c$ = critical packing fraction obtained from max of time scale")
+
 """
 def sortAccordingToA(A, *args):
     arg = np.argsort(A)
