@@ -11,6 +11,10 @@ Universal behaviour of T close to the transition point?
 ![](https://user-images.githubusercontent.com/37348774/226923628-3be2be0e-bcc7-4497-8183-09eaf3114822.png)
 ![](https://user-images.githubusercontent.com/37348774/226923632-ec34a4fd-9b78-45ee-bc73-6d7a81c34285.png)
 
+This one §I don't get, I was expecting all the curves to reach the same y point like in my internship???? Maybe I'm missing something...
+![](https://user-images.githubusercontent.com/37348774/226940975-eb41b70a-f237-46dd-94d5-656cb101a32a.png)
+
+
 
 ### colliding particles k and mu.py
 
