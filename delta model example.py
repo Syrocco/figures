@@ -56,8 +56,8 @@ plt.legend()
 plt.grid()
 
 plt.figure()
-time4 = np.array([curve_fit(partial(exp, maxim = E4[i][0], minim = np.mean(E1[i][-100:])), t[:300], E4[i][:300])[0] for i in range(300)])
-time5 = np.array([curve_fit(partial(exp, maxim = E5[i][0], minim = np.mean(E2[i][-100:])), t[:300], E5[i][:300])[0] for i in range(300)])
+time4 = np.array([curve_fit(partial(exp, maxim = E4[i][0], minim = np.mean(E1[i][-100:])), t[:50], E4[i][:50])[0] for i in range(300)])
+time5 = np.array([curve_fit(partial(exp, maxim = E5[i][0], minim = np.mean(E2[i][-100:])), t[:50], E5[i][:50])[0] for i in range(300)])
 
 plt.scatter(phi, time4*0.005, label = r"$\gamma = 0.005$", s = 7)
 plt.scatter(phi, time1*0.01, label = r"$\gamma = 0.01$", marker = "x", s = 7)
