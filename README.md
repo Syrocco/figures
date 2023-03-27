@@ -3,6 +3,8 @@
 Going to 1
 ![](https://user-images.githubusercontent.com/37348774/226391083-107e2d66-2fd5-4e23-9f08-8087198230de.png)
 
+![](https://user-images.githubusercontent.com/37348774/227989854-0c0888ff-3e03-4243-9e44-50af34d62fb0.png)
+
 left going to 0.5 (because v = exp(-t/gamma) => E = exp(-2t/gamma)
 No Divergence of timescales and not happening at the trzansition (perhaps like drag shift the resonance peak in an oscillator))
 ![](https://user-images.githubusercontent.com/37348774/226391130-d741deef-fa91-4a51-b40e-9a966fd46b3a.png)
