@@ -1,30 +1,59 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import scipy.io 
+import pickle
 
-E = scipy.io.loadmat("lammps data/data.mat")['out']
 
-phi = np.array([0.0394, 0.0552, 0.071 , 0.0868, 0.1026, 0.1184, 0.1342, 0.15  ,
-       0.1658, 0.1816, 0.1974, 0.2132, 0.2289, 0.2447, 0.2605, 0.2763,
-       0.2921, 0.3079, 0.3237, 0.3395, 0.3553, 0.3711, 0.3868, 0.4026,
-       0.4184, 0.4342, 0.45  , 0.4658, 0.4816, 0.4974, 0.5131, 0.5289,
-       0.5447, 0.5605, 0.5763, 0.5921, 0.6079, 0.6237, 0.6395, 0.6553,
-       0.671 , 0.6868, 0.7026, 0.7184, 0.7342, 0.75  ])
+with open(r"lammps data/data.pkl", "rb") as f:
+    syncKuramoto, syncVariance, Ez, sync, Et = pickle.load(f)
 
-amp = np.array([0.04  , 0.0415, 0.043 , 0.0445, 0.046 , 0.0475, 0.049 , 0.0505,
-       0.052 , 0.0535, 0.055 , 0.0565, 0.058 , 0.0595, 0.061 , 0.0625,
-       0.064 , 0.0655, 0.067 , 0.0685, 0.07  , 0.0715, 0.073 , 0.0745,
-       0.076 , 0.0775, 0.079 , 0.0805, 0.082 , 0.0835, 0.085 , 0.0865,
-       0.088 , 0.0895, 0.091 , 0.0925, 0.094 , 0.0955, 0.097 , 0.0985,
-       0.1   ])
 
-h = np.array([1.2 , 1.27, 1.34, 1.41, 1.48, 1.55, 1.62, 1.69, 1.76, 1.83, 1.9 ,
-       1.97])
+E = np.mean(Et[:, :, :, -10:], axis = 3)
+
+"""
+PURELY DEAD STATE (NO XY VELOCITY):
+    TAB[heigh, amp]
+    
+    syncKuramoto = synchronization according to theta for a given (h, a)
+    syncVariance = synchronizeation accorgind to variance for a given (h, a)
+    Ez = Energy in the z direction for a given (h, a)
+    ________________
+ACTIVATE STATE
+    TAB[phi, heigh, amp]
+
+    Et = Energy over time at a given (phi, h, a)
+    E = Energy of the steady state for a given (phi, h, a)
+    sync = dynamics synchronization according to theta for a given (phi, h, a)
+"""
+
+
+
+
+
+phi = np.array([0.05, 0.06, 0.07, 0.08, 0.09, 0.1 , 0.11, 0.12, 0.13, 0.14, 0.15,
+       0.16, 0.17, 0.18, 0.19, 0.2, 0.21, 0.22, 0.23, 0.24, 0.25, 0.26, 0.27, 0.28,
+       0.29, 0.30, 0.31, 0.32, 0.33, 0.34, 0.35, 0.36, 0.37, 0.38, 0.39, 0.4 , 0.41,
+       0.42, 0.43, 0.44, 0.45, 0.46, 0.47, 0.48, 0.49, 0.5 , 0.51, 0.52,
+       0.53, 0.54, 0.55, 0.56, 0.57, 0.58, 0.59, 0.6 , 0.61, 0.62, 0.63,
+       0.64])
+
+amp = np.array([0.045, 0.047, 0.049, 0.051, 0.053, 0.055, 0.057, 0.059, 0.061,
+       0.063, 0.065, 0.067, 0.069, 0.071, 0.073, 0.075, 0.077, 0.079,
+       0.081, 0.083, 0.085, 0.087, 0.089, 0.091, 0.093, 0.095, 0.097,
+       0.099, 0.101, 0.103, 0.105, 0.107, 0.109, 0.111, 0.113, 0.115,
+       0.117, 0.119, 0.121])
+
+h = np.array([1.2   , 1.2615, 1.3231, 1.3846, 1.4462, 1.5077, 1.5692, 1.6308,
+       1.6923, 1.7538, 1.8154, 1.8769, 1.9385, 2. ])
 
 PHI = {k: v for v, k in enumerate(phi)}
 AMP = {k: v for v, k in enumerate(amp)}
 H = {k: v for v, k in enumerate(h)}
 
+plt.figure()
+plt.imshow(E[18], extent = [min(amp), max(amp), min(h), max(h)], origin = 'lower', cmap = "magma", aspect = (np.max(amp) - np.min(amp))/(np.max(h) - np.min(h)))
 
-#plt.imshow(E[0], extent = [min(amp), max(amp), min(h), max(h)], origin = 'lower', cmap = "magma", aspect = (np.max(amp) - np.min(amp))/(np.max(h) - np.min(h)))
-plt.plot(phi, E[:, H[1.55], AMP[0.0805]])
+plt.figure()
+plt.scatter(phi, E[:, H[1.5077], AMP[0.061]])
+
+plt.figure()
+plt.imshow(Ez, extent = [min(amp), max(amp), min(h), max(h)], origin = 'lower', cmap = "magma", aspect = (np.max(amp) - np.min(amp))/(np.max(h) - np.min(h)))
