@@ -9,6 +9,8 @@ with open(r"lammps data/data.pkl", "rb") as f:
 
 E = np.mean(Et[:, :, :, -10:], axis = 3)
 
+
+
 """
 PURELY DEAD STATE (NO XY VELOCITY):
     TAB[heigh, amp]
@@ -17,13 +19,14 @@ PURELY DEAD STATE (NO XY VELOCITY):
     syncVariance = synchronizeation accorgind to variance for a given (h, a)
     Ez = Energy in the z direction for a given (h, a)
     ________________
-ACTIVATE STATE
+ACTIVE STATE
     TAB[phi, heigh, amp]
 
     Et = Energy over time at a given (phi, h, a)
     E = Energy of the steady state for a given (phi, h, a)
     sync = dynamics synchronization according to theta for a given (phi, h, a)
 """
+
 
 
 
@@ -45,15 +48,54 @@ amp = np.array([0.045, 0.047, 0.049, 0.051, 0.053, 0.055, 0.057, 0.059, 0.061,
 h = np.array([1.2   , 1.2615, 1.3231, 1.3846, 1.4462, 1.5077, 1.5692, 1.6308,
        1.6923, 1.7538, 1.8154, 1.8769, 1.9385, 2. ])
 
+
+
 PHI = {k: v for v, k in enumerate(phi)}
 AMP = {k: v for v, k in enumerate(amp)}
 H = {k: v for v, k in enumerate(h)}
 
 plt.figure()
 plt.imshow(E[18], extent = [min(amp), max(amp), min(h), max(h)], origin = 'lower', cmap = "magma", aspect = (np.max(amp) - np.min(amp))/(np.max(h) - np.min(h)))
+plt.xlabel(r"amp")
+plt.ylabel(r"height")
+plt.title(rf"$E at \phi = {phi[18]}$")
+clb=plt.colorbar()
+clb.ax.set_title(r'$E$',fontsize=15)
 
 plt.figure()
 plt.scatter(phi, E[:, H[1.5077], AMP[0.061]])
+plt.xlabel(r"$\phi$")
+plt.ylabel(r"E")
 
 plt.figure()
 plt.imshow(Ez, extent = [min(amp), max(amp), min(h), max(h)], origin = 'lower', cmap = "magma", aspect = (np.max(amp) - np.min(amp))/(np.max(h) - np.min(h)))
+plt.xlabel(r"amp")
+plt.ylabel(r"height")
+plt.title(r'$E_z$ in the dead state')
+clb=plt.colorbar()
+clb.ax.set_title(r'$E$',fontsize=15)
+
+plt.figure()
+phi_critical = 5e-6
+phi_c = phi[(E > phi_critical).argmax(axis = 0)]
+phi_c[phi_c == np.min(phi)] = np.nan
+plt.imshow(phi_c, extent = [min(amp), max(amp), min(h), max(h)], origin = 'lower', cmap = "magma", aspect = (np.max(amp) - np.min(amp))/(np.max(h) - np.min(h)))
+plt.xlabel(r"amp")
+plt.ylabel(r"height")
+clb=plt.colorbar()
+clb.ax.set_title(r'$\phi_c$',fontsize = 15)
+
+plt.figure()
+plt.imshow(syncKuramoto, extent = [min(amp), max(amp), min(h), max(h)], origin = 'lower', cmap = "magma", aspect = (np.max(amp) - np.min(amp))/(np.max(h) - np.min(h)))
+plt.xlabel(r"amp")
+plt.ylabel(r"height")
+clb=plt.colorbar()
+clb.ax.set_title(r'$sync$',fontsize = 15)
+
+plt.figure()
+plt.plot(amp, syncKuramoto[H[1.5077]], label = "sync param")
+plt.plot(amp, phi_c[H[1.5077]], label = "critical_phi" )
+plt.legend()
+plt.xlabel("amp")
+plt.title("h = 1.5077")
+plt.ylabel(r"sync or $\phi_c$")

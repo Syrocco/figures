@@ -128,6 +128,7 @@ plt.xlabel(r"$(\phi - \phi_c)/\phi_c$")
 plt.ylabel(r"$T_{ss}/T_{ss}(\gamma = 0)$")
 plt.legend()
 plt.grid()
+
 plt.title(r"$\phi_c$ = critical packing fraction obtained from max of time scale")
 
 
