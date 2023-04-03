@@ -26,7 +26,8 @@ Second run velocity of individual particles:
 
 ### lammps.py
 
-![](https://user-images.githubusercontent.com/37348774/229454736-56130e3b-2321-463a-b9ba-0983dc862da8.png)
+
+![](https://user-images.githubusercontent.com/37348774/229454744-b6de7ac2-1f64-44fa-a7fc-a3636629c9a5.png)
 ![](https://user-images.githubusercontent.com/37348774/229454739-69c117d0-c4f7-4129-b73d-ff0ecdcd3b23.png)
 ![](https://user-images.githubusercontent.com/37348774/229454741-dae70f3f-5242-4c7d-a6b7-0f366d9d0dae.png)
-![](https://user-images.githubusercontent.com/37348774/229454744-b6de7ac2-1f64-44fa-a7fc-a3636629c9a5.png)
+![](https://user-images.githubusercontent.com/37348774/229454736-56130e3b-2321-463a-b9ba-0983dc862da8.png)
