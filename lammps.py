@@ -4,16 +4,20 @@ import pickle
 
 
 with open(r"lammps data/data.pkl", "rb") as f:
-    syncKuramoto, syncVariance, Ez, sync, Et = pickle.load(f)
+    _, syncVariance, Ez, sync, Et = pickle.load(f)
+with open(r"lammps data/dataTimed.pkl", "rb") as f:
+    t, syncKuramotoWithTime = pickle.load(f)
 
 
 E = np.mean(Et[:, :, :, -10:], axis = 3)
-
+syncKuramoto = np.mean(syncKuramotoWithTime[:, :, -100:], axis = 2)
 
 
 """
 PURELY DEAD STATE (NO XY VELOCITY):
     TAB[heigh, amp]
+    
+    syncKuramotoWithTime = synchronization according to theta for a given (h, a) according to time
     
     syncKuramoto = synchronization according to theta for a given (h, a)
     syncVariance = synchronizeation accorgind to variance for a given (h, a)
