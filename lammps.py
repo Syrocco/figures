@@ -1,16 +1,35 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pickle
+from scipy.optimize import curve_fit
 
+
+def dissipationRateFunction(t, E):
+    keep = int(len(t)/5)
+    a, b = np.shape(t)[:-1]
+
+    dissipationRate = np.zeros((a, b))
+    for i in range(a):
+        for j in range(b):
+            dissipationRate[i, j] = curve_fit(linear, t[i, j, keep:], energyForDissipation[i, j, keep:])[0][0]
+    return dissipationRate
+
+
+def linear(x, a, b):
+    return a*x + b
 
 with open(r"lammps data/data.pkl", "rb") as f:
     _, syncVariance, Ez, sync, Et = pickle.load(f)
 with open(r"lammps data/dataTimed.pkl", "rb") as f:
     t, syncKuramotoWithTime = pickle.load(f)
-
+    
+with open(r"lammps data/dataEnergyTimed.pkl", "rb") as f:
+    tEnergy, energyForDissipation = pickle.load(f)
 
 E = np.mean(Et[:, :, :, -10:], axis = 3)
 syncKuramoto = np.mean(syncKuramotoWithTime[:, :, -100:], axis = 2)
+dissipationRate = dissipationRateFunction(tEnergy, energyForDissipation)
+
 
 
 """
@@ -23,6 +42,12 @@ PURELY DEAD STATE (NO XY VELOCITY):
     syncVariance = synchronizeation accorgind to variance for a given (h, a)
     Ez = Energy in the z direction for a given (h, a)
     ________________
+    
+DISSIPATION RATE:
+    tEnergy = time of simulation
+    energyForDissipation = evolution of energy of non interacting particle according to tEnergy
+    dissipationRate = rate of dissipation for a given (h, a)
+    
 ACTIVE STATE
     TAB[phi, heigh, amp]
 
@@ -103,3 +128,19 @@ plt.legend()
 plt.xlabel("amp")
 plt.title("h = 1.5077")
 plt.ylabel(r"sync or $\phi_c$")
+
+
+plt.figure()
+plt.plot(t, syncKuramotoWithTime[H[1.5077], AMP[0.085]], label = "async")
+plt.plot(t, syncKuramotoWithTime[H[2], AMP[0.085]], label = "sync")
+plt.legend()
+plt.xlabel("time")
+plt.ylabel("Synchronization")
+
+plt.figure()
+plt.imshow(dissipationRate, extent = [min(amp), max(amp), min(h), max(h)], origin = 'lower', cmap = "magma", aspect = (np.max(amp) - np.min(amp))/(np.max(h) - np.min(h)))
+plt.xlabel(r"amp")
+plt.ylabel(r"height")
+plt.title(r'dissipation rate')
+clb=plt.colorbar()
+clb.ax.set_title(r'$E$',fontsize=15)
