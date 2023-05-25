@@ -6,17 +6,22 @@ from scipy.optimize import curve_fit
 
 def dissipationRateFunction(t, E):
     keep = int(len(t)/5)
-    a, b = np.shape(t)[:-1]
+    a, b = np.shape(E)[:-1]
 
     dissipationRate = np.zeros((a, b))
+    constant = np.zeros((a, b))
     for i in range(a):
         for j in range(b):
-            dissipationRate[i, j] = curve_fit(linear, t[i, j, keep:], energyForDissipation[i, j, keep:])[0][0]
-    return dissipationRate
+            param = curve_fit(linear, t[keep:], np.log(energyForDissipation[i, j, keep:]))[0]
+            dissipationRate[i, j] = param[0]
+            constant[i, j] = param[1]
+    return dissipationRate, constant
 
 
 def linear(x, a, b):
-    return a*x + b
+    return -a*x + b
+
+
 
 with open(r"lammps data/data.pkl", "rb") as f:
     _, syncVariance, Ez, sync, Et = pickle.load(f)
@@ -26,13 +31,20 @@ with open(r"lammps data/dataTimed.pkl", "rb") as f:
 with open(r"lammps data/dataEnergyTimed.pkl", "rb") as f:
     tEnergy, energyForDissipation = pickle.load(f)
 
+tEnergy = tEnergy[0, 0]
 E = np.mean(Et[:, :, :, -10:], axis = 3)
 syncKuramoto = np.mean(syncKuramotoWithTime[:, :, -100:], axis = 2)
-dissipationRate = dissipationRateFunction(tEnergy, energyForDissipation)
-
-
+dissipationRate, constant = dissipationRateFunction(tEnergy, energyForDissipation)
 
 """
+i = 13
+j = 30
+plt.plot(tEnergy, energyForDissipation[i, j])
+plt.plot(tEnergy, np.exp(linear(tEnergy, dissipationRate[i, j], constant[i, j])))
+plt.yscale("log")"""
+
+"""
+
 PURELY DEAD STATE (NO XY VELOCITY):
     TAB[heigh, amp]
     
@@ -54,7 +66,6 @@ ACTIVE STATE
     Et = Energy over time at a given (phi, h, a)
     E = Energy of the steady state for a given (phi, h, a)
     sync = dynamics synchronization according to theta for a given (phi, h, a)
-"""
 
 
 
@@ -144,3 +155,4 @@ plt.ylabel(r"height")
 plt.title(r'dissipation rate')
 clb=plt.colorbar()
 clb.ax.set_title(r'$E$',fontsize=15)
+"""
