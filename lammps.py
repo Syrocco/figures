@@ -1,8 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pickle
+import matplotlib
 from scipy.optimize import curve_fit
-
+plt.rcParams.update({'font.size': 22})
 
 def dissipationRateFunction(t, E):
     keep = int(len(t)/5)
@@ -36,12 +37,7 @@ E = np.mean(Et[:, :, :, -10:], axis = 3)
 syncKuramoto = np.mean(syncKuramotoWithTime[:, :, -100:], axis = 2)
 dissipationRate, constant = dissipationRateFunction(tEnergy, energyForDissipation)
 
-"""
-i = 13
-j = 30
-plt.plot(tEnergy, energyForDissipation[i, j])
-plt.plot(tEnergy, np.exp(linear(tEnergy, dissipationRate[i, j], constant[i, j])))
-plt.yscale("log")"""
+
 
 """
 
@@ -68,7 +64,7 @@ ACTIVE STATE
     sync = dynamics synchronization according to theta for a given (phi, h, a)
 
 
-
+"""
 
 
 
@@ -103,9 +99,10 @@ clb=plt.colorbar()
 clb.ax.set_title(r'$E$',fontsize=15)
 
 plt.figure()
-plt.scatter(phi, E[:, H[1.5077], AMP[0.085]])
+plt.scatter(phi, E[:, H[1.5077], AMP[0.087]]/0.001)
 plt.xlabel(r"$\phi$")
-plt.ylabel(r"E")
+plt.ylabel(r"$E/\epsilon$")
+plt.grid(linestyle = "--", alpha = 0.7)
 
 plt.figure()
 plt.imshow(Ez, extent = [min(amp), max(amp), min(h), max(h)], origin = 'lower', cmap = "magma", aspect = (np.max(amp) - np.min(amp))/(np.max(h) - np.min(h)))
@@ -126,11 +123,11 @@ clb=plt.colorbar()
 clb.ax.set_title(r'$\phi_c$',fontsize = 15)
 
 plt.figure()
-plt.imshow(syncKuramoto, extent = [min(amp), max(amp), min(h), max(h)], origin = 'lower', cmap = "magma", aspect = (np.max(amp) - np.min(amp))/(np.max(h) - np.min(h)))
+plt.imshow(syncKuramoto, extent = [min(amp), max(amp), min(h), max(h)], origin = 'lower', cmap = "cool", aspect = (np.max(amp) - np.min(amp))/(np.max(h) - np.min(h)))
 plt.xlabel(r"amp")
 plt.ylabel(r"height")
 clb=plt.colorbar()
-clb.ax.set_title(r'$sync$',fontsize = 15)
+clb.ax.set_title(r'$Sync$',fontsize = 15)
 
 plt.figure()
 plt.plot(amp, syncKuramoto[H[1.5077]], label = "sync param")
@@ -142,8 +139,8 @@ plt.ylabel(r"sync or $\phi_c$")
 
 
 plt.figure()
-plt.plot(t, syncKuramotoWithTime[H[1.5077], AMP[0.085]], label = "async")
-plt.plot(t, syncKuramotoWithTime[H[2], AMP[0.085]], label = "sync")
+plt.plot(t, syncKuramotoWithTime[H[1.5077], AMP[0.085]], label = "async state")
+plt.plot(t, syncKuramotoWithTime[H[2], AMP[0.085]], label = "sync state")
 plt.legend()
 plt.xlabel("time")
 plt.ylabel("Synchronization")
@@ -155,4 +152,23 @@ plt.ylabel(r"height")
 plt.title(r'dissipation rate')
 clb=plt.colorbar()
 clb.ax.set_title(r'$E$',fontsize=15)
-"""
+
+def f(x, x0, y0, x1, y1):
+    a = (y1 - y0)/(x1 - x0)
+    b = y1/(a*x1)
+    return a*x + b
+
+c = np.zeros((256, 3))
+blue = [245, 94, 94]
+pink = [73, 150, 156]
+
+c[:, 0] = np.linspace(blue[0], pink[0], 256)/256
+c[:, 1] = np.linspace(blue[1], pink[1], 256)/256
+c[:, 2] = np.linspace(blue[2], pink[2], 256)/256
+cm = matplotlib.colors.ListedColormap(c)
+plt.figure()
+plt.imshow(syncKuramoto, extent = [min(amp), max(amp), min(h), max(h)], origin = 'lower', cmap = cm, aspect = (np.max(amp) - np.min(amp))/(np.max(h) - np.min(h)))
+plt.xlabel(r"amp")
+plt.ylabel(r"height")
+clb=plt.colorbar()
+clb.ax.set_title(r'$Sync$',fontsize = 15)
