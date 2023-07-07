@@ -5,33 +5,48 @@ from scipy.stats import linregress
 
 
 
-data = Data("/home/syrocco/Documents/Data/diffusivity/phi_0.1367839freq_53T_0.085h_1.5077.dumpL")
-allData = np.array(dataArray(loc))
+"""
+def computeMSD(data):
+    dump = data.dump
+    n = dump.nframes
+    
+    dump.jump_to_frame(0)
+    xi = dump.get_atompropf("xu")
+    yi = dump.get_atompropf("yu")
+    MSD = []
+    for i in range(n):
+        dump.jump_to_frame(i)
+        MSD.append(np.mean((dump.get_atompropf("xu") - xi)**2 + (dump.get_atompropf("yu") - yi)**2))
+    return np.array(MSD)
+    
+
+allData = np.array(dataArray("/home/syrocco/Documents/Data/diffusivity/temp/"))
 
 phi = np.array([data.phi for data in allData])
 allData = allData[np.argsort(phi)]
 
 t = allData[0].ticks
+t = t - t[0]
 
 MSD = np.zeros((len(allData), len(t)))
 E = np.zeros((len(allData), len(t)))
 phi = np.zeros((len(allData)))
 for i, data in enumerate(allData):
-    MSD[i] = data.D
+    MSD[i] = computeMSD(data)
     E[i] = data.E/data.N
     phi[i] = data.phi
 
-np.save('MSD.npy', [t, MSD, phi, E])
+np.savez('MSD.npz', t = t, MSD = MSD, phi = phi, E = E)
+"""
 
-arr = np.load("MSD.txt")
-t = arr[0]
-MSD = arr[1]
-phi = arr[2]
-Earr = arr[3]
+arr = np.load("MSD.npz")
+t = arr['t']
+MSD = arr['MSD']
+phi = arr['phi']
+Earr = arr["E"]
 
 
-# time after which we start to compute the observables
-where = t > 4
+
 
 N = len(MSD)
 
@@ -41,23 +56,27 @@ E = np.zeros(N)
 E_err = np.zeros(N)
 
 for i in range(N):
-    res = linregress(t[where], MSD[i][where])
+    res = linregress(t, MSD[i])
     D[i] = res[0]/2
-    D_err[i] = res[-2]/2
-    E[i] = np.mean(Earr[i][where])
-    E_err[i] = np.std(Earr[i][where])
+    D_err[i] = res[-1]/2
+    E[i] = np.mean(Earr[i])
+    E_err[i] = np.std(Earr[i])
 
 
 fig, ax1 = plt.subplots()
 
+c1 = "black"
 ax1.set_xlabel(r'$\phi$')
-ax1.set_ylabel('E')
-ax1.plot(phi, E)
+ax1.set_ylabel('E', color = c1)
+ax1.errorbar(phi, E, yerr = E_err, color = c1, fmt = "o")
+ax1.tick_params(axis='y', labelcolor = c1)
 
 ax2 = ax1.twinx()  
 
-ax2.set_ylabel('D')
-ax2.plot(phi, D)
+c2 = "grey"
+ax2.set_ylabel('D', color = c2)
+ax2.errorbar(phi, D, yerr = D_err, fmt = "o", color = c2)
+ax2.tick_params(axis='y', labelcolor = c2)
 
 fig.tight_layout()  
 plt.show()

@@ -99,7 +99,7 @@ clb=plt.colorbar()
 clb.ax.set_title(r'$E$',fontsize=15)
 
 plt.figure()
-plt.scatter(phi, E[:, H[1.5077], AMP[0.087]]/0.001)
+plt.scatter(phi, E[:, H[1.5077], AMP[0.085]]/0.001)
 plt.xlabel(r"$\phi$")
 plt.ylabel(r"$E/\epsilon$")
 plt.grid(linestyle = "--", alpha = 0.7)
